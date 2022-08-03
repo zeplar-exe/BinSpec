@@ -8,13 +8,20 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="BinSpec">
     
-    <Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>
-    
     <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open Binary File..." Click="OpenBinaryFileClick">
+                    
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        
         <Grid DockPanel.Dock="Right">
-            <TextBox IsReadOnly="True" Text="{Binding DisplayText}"/>
+            <TextBox
+                Text="{Binding DisplayText.Value}"
+                FontFamily="/Assets/CourierPrime-Regular.ttf" FontSize="18"
+                IsReadOnly="True" TextWrapping="Wrap"/>
         </Grid>
     </DockPanel>
 
