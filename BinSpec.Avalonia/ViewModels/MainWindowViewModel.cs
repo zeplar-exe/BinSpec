@@ -2,6 +2,6 @@
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public string Greeting => "Welcome to Avalonia!";
+        public string DisplayText => "0101010101011011010100101";
     }
 }

@@ -6,12 +6,16 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="BinSpec.Avalonia.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="BinSpec.Avalonia">
+        Title="BinSpec">
     
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    
+    <DockPanel>
+        <Grid DockPanel.Dock="Right">
+            <TextBox IsReadOnly="True" Text="{Binding DisplayText}"/>
+        </Grid>
+    </DockPanel>
 
 </Window>
