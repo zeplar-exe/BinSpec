@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:BinSpec.Avalonia.ViewModels"
+        xmlns:view="using:BinSpec.Avalonia.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -18,10 +19,9 @@
         </Menu>
         
         <Grid DockPanel.Dock="Right">
-            <TextBox
-                Text="{Binding DisplayText.Value}"
-                FontFamily="/Assets/CourierPrime-Regular.ttf" FontSize="18"
-                IsReadOnly="True" TextWrapping="Wrap"/>
+            <view:SwapBinaryDisplay Width="1000" Height="700" Source="{Binding OpenReader.Value}" FontSize="24">
+                
+            </view:SwapBinaryDisplay>
         </Grid>
     </DockPanel>
 

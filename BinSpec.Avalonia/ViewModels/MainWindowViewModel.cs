@@ -1,14 +1,15 @@
 ﻿using BinSpec.Avalonia.MVVM;
+using BinSpec.Avalonia.Views;
 
 namespace BinSpec.Avalonia.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ObservableProperty<string> DisplayText { get; }
+        public ObservableProperty<SwapTextReader> OpenReader { get; }
 
         public MainWindowViewModel()
         {
-            DisplayText = new ObservableProperty<string>();
+            OpenReader = new ObservableProperty<SwapTextReader>();
         }
     }
 }

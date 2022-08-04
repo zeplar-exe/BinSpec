@@ -33,23 +33,10 @@ namespace BinSpec.Avalonia.Views
                 return;
 
             var file = files.First();
-            await using var stream = File.OpenRead(file);
-
-            var builder = new StringBuilder();
-
-            await foreach (var b in ReadAllBytesAsync(stream))
-            {
-                var bits = new BitArray(new[] { b });
-
-                for (var i = 0; i < bits.Length; i++)
-                {
-                    var bit = bits[i];
-
-                    builder.Append(bit ? '1' : '0');
-                }
-            }
-
-            ViewModel.DisplayText.Value = builder.ToString();
+            var stream = File.OpenRead(file);
+            var reader = new SwapTextReader(stream);
+            
+            ViewModel.OpenReader.Value = reader;;
         }
         
         private async Task<string[]> OpenFileDialog()
