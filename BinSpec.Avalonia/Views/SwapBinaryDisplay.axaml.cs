@@ -13,14 +13,14 @@ namespace BinSpec.Avalonia.Views;
 
 public partial class SwapBinaryDisplay : UserControl, IScrollable
 {
-    public SwapTextReader? Source
+    public BinaryTextReader? Source
     {
-        get => (SwapTextReader?)GetValue(SourceProperty);
+        get => (BinaryTextReader?)GetValue(SourceProperty);
         set => SetValue(SourceProperty, value);
     }
     
-    public static readonly AvaloniaProperty<SwapTextReader?> SourceProperty =
-        AvaloniaProperty.Register<SwapBinaryDisplay, SwapTextReader?>("Source");
+    public static readonly AvaloniaProperty<BinaryTextReader?> SourceProperty =
+        AvaloniaProperty.Register<SwapBinaryDisplay, BinaryTextReader?>("Source");
 
     public ObservableProperty<Thickness> TextMargin { get; } // TODO
     public ObservableProperty<int> LineSpacing { get; }
@@ -61,7 +61,7 @@ public partial class SwapBinaryDisplay : UserControl, IScrollable
             TextWrapping = TextWrapping.Wrap,
             FontSize = FontSize,
             Typeface = new Typeface(FontFamily.Name),
-            Text = "A",
+            Text = "0",
         };
 
         var singleCharacterRect = measure.HitTestTextPosition(0);
@@ -85,7 +85,7 @@ public partial class SwapBinaryDisplay : UserControl, IScrollable
         var bufferSize = lineCount * lineCharacterWidth;
         var buffer = new string[bufferSize];
 
-        Source.Read(buffer);
+        // Source.Read(buffer);
         
         var text = new FormattedText
         {

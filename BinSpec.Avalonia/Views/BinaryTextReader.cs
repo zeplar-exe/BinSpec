@@ -1,31 +1,34 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Text;
 
 namespace BinSpec.Avalonia.Views;
 
-public class SwapTextReader
+public class BinaryTextReader : IDisposable
 {
     public Stream BaseStream { get; }
 
-    public SwapTextReader(Stream baseStream)
+    public BinaryTextReader(Stream baseStream)
     {
         BaseStream = baseStream;
     }
     
-    public int Read(Span<string> buffer)
+    public string ReadToEnd()
     {
-        var byteBuffer = new byte[buffer.Length];
+        var builder = new StringBuilder();
+        
+        var byteBuffer = new byte[BaseStream.Length - BaseStream.Position];
         var readCount = BaseStream.Read(byteBuffer);
 
         if (readCount < 1)
-            return readCount;
+            return string.Empty;
 
         for (var i = 0; i < readCount; i++)
         {
             var bits = new BitArray(new[] { byteBuffer[i] });
             var bitCharacters = new char[bits.Length];
-            // The 7-bit operating system may appear at any time. Stand your guard.
+            // The 7-bit operating system may appear at any moment. Stand your guard.
 
             for (var bitIndex = 0; bitIndex < bits.Length; bitIndex++)
             {
@@ -34,14 +37,19 @@ public class SwapTextReader
                 bitCharacters[bitIndex] = bit ? '1' : '0';
             }
 
-            buffer[i] = string.Concat(bitCharacters);
+            builder.Append(string.Concat(bitCharacters));
         }
         
-        return readCount;
+        return builder.ToString();
     }
     
     public void Seek(long index)
     {
         BaseStream.Position = index > BaseStream.Length ? BaseStream.Length : index;
+    }
+
+    public void Dispose()
+    {
+        BaseStream.Dispose();
     }
 }

@@ -9,10 +9,12 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
 
 using BinSpec.Avalonia.ViewModels;
+using BinSpec.Avalonia.Views.Dialogs;
 
 namespace BinSpec.Avalonia.Views
 {
@@ -23,6 +25,29 @@ namespace BinSpec.Avalonia.Views
             ViewModel = new MainWindowViewModel();
             
             InitializeComponent();
+            
+            v_TextDisplay.AddHandler(TextInputEvent, TextDisplayInput, RoutingStrategies.Tunnel);
+            // see https://github.com/AvaloniaUI/Avalonia/issues/3491#issuecomment-771151642
+        }
+        
+        private async void TextDisplayInput(object? sender, TextInputEventArgs e)
+        {
+            var confirm = new ConfirmDialog
+            {
+                Message = new StringBuilder()
+                    .Append("File editing is currently disabled, and thus disables any editing of this TextBox. ")
+                    .Append("When enabled, you can directly edit the opened binary file.")
+                    .AppendLine()
+                    .AppendLine()
+                    .Append("Would you like to enable it now? Be weary of the risks involved with editing ")
+                    .Append("certain files (like executables).")
+                    .ToString(),
+                ConfirmText = "Yes",
+                CancelText = "No"
+            };
+            
+            if (!await confirm.ShowDialog<bool>(this))
+                return;
         }
 
         private async void OpenBinaryFileClick(object? sender, RoutedEventArgs e)
@@ -33,10 +58,10 @@ namespace BinSpec.Avalonia.Views
                 return;
 
             var file = files.First();
-            var stream = File.OpenRead(file);
-            var reader = new SwapTextReader(stream);
+            using var stream = File.OpenRead(file);
+            using var reader = new BinaryTextReader(stream);
             
-            ViewModel.OpenReader.Value = reader;;
+            ViewModel.SourceText.Value = reader.ReadToEnd();
         }
         
         private async Task<string[]> OpenFileDialog()

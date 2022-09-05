@@ -5,11 +5,11 @@ namespace BinSpec.Avalonia.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ObservableProperty<SwapTextReader> OpenReader { get; }
+        public ObservableProperty<string> SourceText { get; }
 
         public MainWindowViewModel()
         {
-            OpenReader = new ObservableProperty<SwapTextReader>();
+            SourceText = new ObservableProperty<string>();
         }
     }
 }

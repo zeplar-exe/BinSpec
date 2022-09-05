@@ -12,16 +12,15 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open Binary File..." Click="OpenBinaryFileClick">
-                    
-                </MenuItem>
+                <MenuItem Header="_Open Binary File..." Click="OpenBinaryFileClick"/>
             </MenuItem>
         </Menu>
         
         <Grid DockPanel.Dock="Right">
-            <view:SwapBinaryDisplay Width="1000" Height="700" Source="{Binding OpenReader.Value}" FontSize="24">
-                
-            </view:SwapBinaryDisplay>
+            <TextBox x:Name="v_TextDisplay" Text="{Binding SourceText.Value}"
+                     IsReadOnly="True" 
+                     FontSize="24"
+                     TextWrapping="Wrap"/>
         </Grid>
     </DockPanel>
 
