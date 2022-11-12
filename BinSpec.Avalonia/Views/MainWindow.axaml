@@ -13,12 +13,12 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Open Binary File..." Click="OpenBinaryFileClick"/>
+                <MenuItem Header="_Save Binary File..." Command="{Binding SaveCommand}"/>
             </MenuItem>
         </Menu>
         
         <Grid DockPanel.Dock="Right">
             <TextBox x:Name="v_TextDisplay" Text="{Binding SourceText.Value}"
-                     IsReadOnly="True" 
                      FontSize="24"
                      TextWrapping="Wrap"/>
         </Grid>

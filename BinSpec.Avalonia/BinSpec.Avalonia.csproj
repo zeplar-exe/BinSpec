@@ -29,4 +29,22 @@
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.14" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\DialogMsg.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>DialogMsg.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Resources\DialogMsg.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Dialogs.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="SimpleConfig">
+        <HintPath>..\..\Global\SimpleConfig.dll</HintPath>
+      </Reference>
+    </ItemGroup>
 </Project>

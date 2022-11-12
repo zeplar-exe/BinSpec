@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
+using BinSpec.Avalonia.Resources;
 using BinSpec.Avalonia.ViewModels;
 using BinSpec.Avalonia.Views;
 
@@ -11,6 +12,8 @@ namespace BinSpec.Avalonia
     {
         public override void Initialize()
         {
+            Settings.Load();
+            
             AvaloniaXamlLoader.Load(this);
         }
 

@@ -8,10 +8,12 @@
         WindowStartupLocation="CenterOwner"
         SizeToContent="Height"
         Width="500">
-    <Grid RowDefinitions="Auto, 10, Auto, 5" Margin="10">
+    <Grid RowDefinitions="Auto, 10, Auto, 5, Auto, 5" Margin="10">
         <TextBlock Grid.Row="0" Text="{Binding Message}" TextWrapping="Wrap"/>
         
-        <StackPanel Grid.Row="2" Spacing="15" Orientation="Horizontal">
+        <CheckBox x:Name="v_DontAskAgain" Grid.Row="2">Don't ask me again</CheckBox>
+        
+        <StackPanel Grid.Row="4" Spacing="15" Orientation="Horizontal">
             <Button 
                 Content="{Binding Path=ConfirmText, FallbackValue=Confirm}" 
                 MinWidth="100" HorizontalContentAlignment="Center" 
