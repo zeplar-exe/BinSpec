@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BinSpec.Avalonia.Views;
 
@@ -14,15 +15,12 @@ public class BinaryTextReader : IDisposable
         BaseStream = baseStream;
     }
     
-    public string ReadToEnd()
+    public async Task<string> ReadToEndAsync()
     {
         var builder = new StringBuilder();
         
         var byteBuffer = new byte[BaseStream.Length - BaseStream.Position];
-        var readCount = BaseStream.Read(byteBuffer);
-
-        if (readCount < 1)
-            return string.Empty;
+        var readCount = await BaseStream.ReadAsync(byteBuffer);
 
         for (var i = 0; i < readCount; i++)
         {

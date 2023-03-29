@@ -2,22 +2,28 @@
 
 public class BinarySpecification
 {
-    private List<ByteSpecifier> Specifiers { get; set; }
+    private List<ByteSpecifier> Specifiers { get; }
 
-    public long SpecifiedLength => Specifiers.Sum(s => s.ByteCount);
+    // https://stackoverflow.com/a/35613036/16324801
+    public ulong SpecifiedLength => Specifiers
+        .Select(s => s.ByteCount)
+        .Aggregate((a, c) => a + c);
+    
+    public int BitSize { get; }
 
-    public BinarySpecification()
+    public BinarySpecification(int bitSize)
     {
+        BitSize = bitSize;
         Specifiers = new List<ByteSpecifier>();
     }
 
-    public ByteSpecifier AtLocation(long index)
+    public ByteSpecifier AtLocation(ulong index)
     {
-        var sum = 0L;
+        var sum = 0UL;
 
         foreach (var specifier in Specifiers)
         {
-            if (index >= sum)
+            if (index < sum)
             {
                 return specifier;
             }
@@ -32,10 +38,5 @@ public class BinarySpecification
     public void AddSpecifier(ByteSpecifier specifier)
     {
         Specifiers.Add(specifier);
-    }
-
-    public void CopyTo(BinarySpecification specification)
-    {
-        specification.Specifiers.AddRange(Specifiers);
     }
 }

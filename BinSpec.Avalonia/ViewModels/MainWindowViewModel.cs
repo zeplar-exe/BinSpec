@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Windows.Input;
 
 using BinSpec.Avalonia.MVVM;
@@ -10,14 +13,19 @@ namespace BinSpec.Avalonia.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ObservableProperty<string> SourceText { get; }
+        public ObservableCollection<byte> SourceBytes { get; }
+        public string SourceText => "";
         public ObservableProperty<string> FilePath { get; }
         public ICommand SaveCommand { get; }
         public ObservableProperty<bool> EditEnabled { get; }
+        
+        public ICommand? TextDisplayCut { get; set; }
+        public ICommand? TextDisplayCopy { get; set; }
+        public ICommand? TextDisplayPaste { get; set; }
 
         public MainWindowViewModel()
         {
-            SourceText = new ObservableProperty<string>();
+            SourceBytes = new ObservableCollection<byte>();
             FilePath = new ObservableProperty<string>();
             EditEnabled = new ObservableProperty<bool>();
             
@@ -27,7 +35,7 @@ namespace BinSpec.Avalonia.ViewModels
 
         private void Save()
         {
-            File.WriteAllText(FilePath.Value, SourceText.Value);
+            File.WriteAllBytes(FilePath.Value, SourceBytes.ToArray());
         }
     }
 }

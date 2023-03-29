@@ -9,19 +9,41 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="BinSpec">
     
-    <DockPanel>
-        <Menu DockPanel.Dock="Top">
+    <Grid RowDefinitions="Auto, *">
+        <Menu Grid.Row="0">
             <MenuItem Header="_File">
                 <MenuItem Header="_Open Binary File..." Click="OpenBinaryFileClick"/>
-                <MenuItem Header="_Save Binary File..." Command="{Binding SaveCommand}"/>
+                <MenuItem Header="_Save Binary File" Command="{Binding SaveCommand}"/>
+            </MenuItem>
+            
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Cut" Command="{Binding TextDisplayCut}"/>
+                <MenuItem Header="Copy" Command="{Binding TextDisplayCopy}"/>
+                <MenuItem Header="Paste" Command="{Binding TextDisplayPaste}"/>
             </MenuItem>
         </Menu>
         
-        <Grid DockPanel.Dock="Right">
-            <TextBox x:Name="v_TextDisplay" Text="{Binding SourceText.Value}"
-                     FontSize="24"
-                     TextWrapping="Wrap"/>
+        <Grid Grid.Row="1" ColumnDefinitions="*, 2, Auto">
+            <Grid Grid.Column="0">
+                <TextBox x:Name="v_TextDisplay"
+                         FontSize="24"
+                         TextWrapping="Wrap"/>
+            </Grid>
+            
+            <GridSplitter Grid.Column="1"></GridSplitter>
+        
+            <Grid Grid.Column="2">
+                <StackPanel Orientation="Vertical" Spacing="4" Margin="7">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBox
+                            MinWidth="35" MaxWidth="35" 
+                            MinHeight="0"
+                            TextAlignment="Center">0</TextBox>
+                        <TextBlock VerticalAlignment="Center">some setting</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
         </Grid>
-    </DockPanel>
+    </Grid>
 
 </Window>

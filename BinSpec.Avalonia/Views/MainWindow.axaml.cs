@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -17,12 +18,12 @@ using BinSpec.Avalonia.Resources;
 using BinSpec.Avalonia.ViewModels;
 using BinSpec.Avalonia.Views.Dialogs;
 
+using ReactiveUI;
+
 namespace BinSpec.Avalonia.Views
 {
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
-        private bool EditEnabled { get; set; }
-        
         public MainWindow()
         {
             ViewModel = new MainWindowViewModel();
@@ -31,25 +32,42 @@ namespace BinSpec.Avalonia.Views
             
             v_TextDisplay.AddHandler(TextInputEvent, TextDisplayInput, RoutingStrategies.Tunnel);
             // see https://github.com/AvaloniaUI/Avalonia/issues/3491#issuecomment-771151642
+
+            ViewModel.TextDisplayCut = ReactiveCommand.Create(TextDisplayCutAction,
+                this.WhenAnyValue(w => w.v_TextDisplay.CanCut));
+            ViewModel.TextDisplayCopy = ReactiveCommand.Create(TextDisplayCopyAction,
+                    this.WhenAnyValue(w => w.v_TextDisplay.CanCopy));
+            ViewModel.TextDisplayPaste = ReactiveCommand.Create(TextDisplayPasteAction,
+                    this.WhenAnyValue(w => w.v_TextDisplay.CanPaste));
         }
+        
+        private void TextDisplayCutAction() => v_TextDisplay.Cut();
+        private void TextDisplayCopyAction() => v_TextDisplay.Copy();
+        private void TextDisplayPasteAction() => v_TextDisplay.Paste();
         
         private async void TextDisplayInput(object? sender, TextInputEventArgs e)
         {
-            if (EditEnabled)
+            if (!e.Text?.All(c => c is '0' or '1') ?? false)
+            {
+                e.Handled = true;
+                return;
+            }
+            
+            if (ViewModel.EditEnabled.Value)
             {
                 return;
             }
 
             if (Settings.Get<bool>("ALLOW_DISPLAY_EDIT_DONT_ASK_AGAIN"))
             {
-                EditEnabled = true;
+                ViewModel.EditEnabled.Value = true;
                 
                 return;
             }
             
             if (Settings.Get<bool>("DISALLOW_DISPLAY_EDIT_DONT_ASK_AGAIN"))
             {
-                EditEnabled = false;
+                ViewModel.EditEnabled.Value = false;
                 e.Handled = true;
                 
                 return;
@@ -68,7 +86,7 @@ namespace BinSpec.Avalonia.Views
             
             if (result.Confirmed)
             {
-                EditEnabled = true;
+                ViewModel.EditEnabled.Value = true;
 
                 if (result.DontAskAgain)
                 {
@@ -86,6 +104,8 @@ namespace BinSpec.Avalonia.Views
 
         private async void OpenBinaryFileClick(object? sender, RoutedEventArgs e)
         {
+            ViewModel.SourceBytes.Clear();
+            
             var files = await OpenFileDialog();
 
             if (files.Length == 0)
@@ -94,8 +114,13 @@ namespace BinSpec.Avalonia.Views
             var file = files.First();
             await using var stream = File.OpenRead(file);
             using var reader = new BinaryTextReader(stream);
-            
-            ViewModel.SourceText.Value = reader.ReadToEnd();
+
+            //await foreach (var b in ReadAllBytesAsync(stream))
+            //{
+                //ViewModel.SourceBytes.Add(b);
+            //}
+
+            v_TextDisplay.Text = await reader.ReadToEndAsync();
         }
         
         private async Task<string[]> OpenFileDialog()

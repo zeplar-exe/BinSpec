@@ -1,13 +1,6 @@
-﻿using System;
-using System.Reactive;
-
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-
-using DynamicData.Binding;
 
 namespace BinSpec.Avalonia.Views.Dialogs;
 
@@ -42,30 +35,18 @@ public partial class ConfirmDialog : Window
 
     public ConfirmDialog()
     {
-        InitializeComponent();
-        #if DEBUG
-        this.AttachDevTools();
-        #endif
-    }
-
-    private void InitializeComponent()
-    {
         DataContext = this;
         
-        AvaloniaXamlLoader.Load(this);
+        InitializeComponent();
     }
 
     private void Confirm(object? sender, RoutedEventArgs e)
     {
-        var box = this.FindControl<CheckBox>("v_DontAskAgain");
-        
-        Close(new ConfirmDialogResult(true, box.IsChecked ?? false));
+        Close(new ConfirmDialogResult(true, v_DontAskAgain.IsChecked ?? false));
     }
     
     private void Cancel(object? sender, RoutedEventArgs e)
     {
-        var box = this.FindControl<CheckBox>("v_DontAskAgain");
-        
-        Close(new ConfirmDialogResult(false, box.IsChecked ?? false));
+        Close(new ConfirmDialogResult(false, v_DontAskAgain.IsChecked ?? false));
     }
 }
